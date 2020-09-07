@@ -1,0 +1,26 @@
+name: Docker
+
+on:
+  workflow_dispatch:
+
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+jobs:
+  build and publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          docker build -t huangtingluo/k8s-runner-image:latest . --file Dockerfile
+          
+#      - uses: docker/login-action@v1.3.0
+#        with:
+#          password: ${{secrets.docker_credential}}
+      
+#      - run: |
+#         docker push huangtingluo/k8s-runner-image:latest
