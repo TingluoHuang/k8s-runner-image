@@ -18,9 +18,10 @@ jobs:
       - run: |
           docker build -t huangtingluo/k8s-runner-image:latest . --file Dockerfile
           
-#      - uses: docker/login-action@v1.3.0
-#        with:
-#          password: ${{secrets.docker_credential}}
+      - uses: docker/login-action@v1.3.0
+        with:
+          username: huangtingluo
+          password: ${{secrets.docker_cred}}
       
-#      - run: |
-#         docker push huangtingluo/k8s-runner-image:latest
+      - run: |
+         docker push huangtingluo/k8s-runner-image:latest
