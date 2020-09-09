@@ -30,17 +30,16 @@ RUN sh get-docker.sh
 # Allow runner to run as root
 ENV RUNNER_ALLOW_RUNASROOT=1
 
+RUN ./download-runner.sh
+COPY ./runner /actions-runner
+
 # Directory for runner to operate in
-RUN mkdir /actions-runner
 WORKDIR /actions-runner
 COPY ./download-runner.sh /actions-runner/download-runner.sh
 COPY ./entrypoint.sh /actions-runner/entrypoint.sh
 COPY ./jobstart.sh /actions-runner/jobstart.sh
 COPY ./jobrunning.sh /actions-runner/jobrunning.sh
 COPY ./jobcomplete.sh /actions-runner/jobcomplete.sh
-
-RUN /actions-runner/download-runner.sh
-RUN rm -f /actions-runner/download-runner.sh
 
 ENV _INTERNAL_JOBSTART_NOTIFICATION=/actions-runner/jobstart.sh
 ENV _INTERNAL_JOBRUNNING_NOTIFICATION=/actions-runner/jobrunning.sh
