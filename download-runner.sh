@@ -16,7 +16,7 @@ set -e
 
 # delete the download tar.gz file
 #rm -f ${RUNNER_DOWNLOAD_URL##*/}
-if [ -n "${RUNNER_DOWNLOAD_URL}" ]; then
+if [[ "${RUNNER_DOWNLOAD_URL}" == "" ]]; then
   # For the GHES Alpha, download the runner from github.com
   latest_version_label=$(curl -s -X GET 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name')
   latest_version=$(echo ${latest_version_label:1})
