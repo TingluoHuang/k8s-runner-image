@@ -2,10 +2,6 @@ name: Docker
 
 on:
   workflow_dispatch:
-    inputs:
-      runnerConfigUrl:
-        description: 'URL for configuring runner'
-        required: true
 
   push:
     # Publish `master` as Docker `latest` image.
@@ -19,17 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/github-script@v3.0.0
-        with:
-          debug: true
-          script: |
-            var latestRelease = await github.repos.getLatestRelease({
-              "actions",
-              "runner"
-            })
-            console.log(latestRelease.data)
-        env:
-          RUNNER_URL: ${{github.event.inputs.runnerConfigUrl}}
       - run: |
           docker build -t huangtingluo/k8s-runner-image:latest . --file Dockerfile
           
