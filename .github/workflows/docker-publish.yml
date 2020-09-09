@@ -2,6 +2,9 @@ name: Docker
 
 on:
   workflow_dispatch:
+    inputs:
+      runnerDownloadUrl:
+        description: 'Overwrite runner download url from http://github.com/actions/runner/releases'     
 
   push:
     # Publish `master` as Docker `latest` image.
@@ -17,6 +20,8 @@ jobs:
       
       - run: |
           ./download-runner.sh
+        env:
+          RUNNER_DOWNLOAD_URL: ${{ github.event.inputs.runnerDownloadUrl }}
 
       - run: |
           docker build -t huangtingluo/k8s-runner-image:latest . --file Dockerfile
