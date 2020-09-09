@@ -16,26 +16,35 @@ set -e
 
 # delete the download tar.gz file
 #rm -f ${RUNNER_DOWNLOAD_URL##*/}
+if [ -n "${RUNNER_DOWNLOAD_URL}" ]; then
+  # For the GHES Alpha, download the runner from github.com
+  latest_version_label=$(curl -s -X GET 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name')
+  latest_version=$(echo ${latest_version_label:1})
+  runner_file="actions-runner-linux-x64-${latest_version}.tar.gz"
 
-# For the GHES Alpha, download the runner from github.com
-latest_version_label=$(curl -s -X GET 'https://api.github.com/repos/actions/runner/releases/latest' | jq -r '.tag_name')
-latest_version=$(echo ${latest_version_label:1})
-runner_file="actions-runner-linux-x64-${latest_version}.tar.gz"
+  runner_url="https://github.com/actions/runner/releases/download/${latest_version_label}/${runner_file}"
 
-runner_url="https://github.com/actions/runner/releases/download/${latest_version_label}/${runner_file}"
+  echo "Downloading ${latest_version_label} for ${runner_plat} ..."
+  echo $runner_url
 
-echo "Downloading ${latest_version_label} for ${runner_plat} ..."
-echo $runner_url
+  curl -O -L ${runner_url}
 
-curl -O -L ${runner_url}
+  ls -la *.tar.gz
 
-ls -la *.tar.gz
+  #---------------------------------------------------
+  # extract to runner directory in this directory
+  #---------------------------------------------------
+  echo
+  echo "Extracting ${runner_file} to ./runner"
 
-#---------------------------------------------------
-# extract to runner directory in this directory
-#---------------------------------------------------
-echo
-echo "Extracting ${runner_file} to ./runner"
+  mkdir runner
+  tar xzf "./${runner_file}" -C runner
+else
+  mkdir runner
+  cd runner
+  curl -Ls ${RUNNER_DOWNLOAD_URL} | tar xz
 
-mkdir runner
-tar xzf "./${runner_file}" -C runner
+  # delete the download tar.gz file
+  rm -f ${RUNNER_DOWNLOAD_URL##*/}
+fi
+
