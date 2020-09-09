@@ -37,4 +37,5 @@ ls -la *.tar.gz
 echo
 echo "Extracting ${runner_file} to ./runner"
 
+mkdir runner
 tar xzf "./${runner_file}" -C runner
