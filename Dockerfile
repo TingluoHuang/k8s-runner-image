@@ -33,13 +33,10 @@ COPY ./runner /actions-runner
 # Directory for runner to operate in
 WORKDIR /actions-runner
 COPY ./entrypoint.sh /actions-runner/entrypoint.sh
-COPY ./jobstart.sh /actions-runner/jobstart.sh
-COPY ./jobrunning.sh /actions-runner/jobrunning.sh
-COPY ./jobcomplete.sh /actions-runner/jobcomplete.sh
+COPY ./runner_lifecycle.sh /actions-runner/runner_lifecycle.sh
 
-ENV _INTERNAL_JOBSTART_NOTIFICATION=/actions-runner/jobstart.sh
-ENV _INTERNAL_JOBRUNNING_NOTIFICATION=/actions-runner/jobrunning.sh
-ENV _INTERNAL_JOBCOMPLETE_NOTIFICATION=/actions-runner/jobcomplete.sh
+ENV _INTERNAL_RUNNER_LIFECYCLE_NOTIFICATION=/actions-runner/runner_lifecycle.sh
+
 
 # Allow runner to run as root
 ENV RUNNER_ALLOW_RUNASROOT=1
